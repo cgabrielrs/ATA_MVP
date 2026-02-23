@@ -98,6 +98,16 @@ export default function AtataDinizApp() {
                 <div className="flex items-center justify-between px-4 py-3 bg-[#fdfdfd] border-b">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Transcrição</span>
                   <div className="flex items-center gap-2">
+                    {transcript && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 text-destructive hover:bg-destructive/5"
+                        onClick={() => setTranscript("")}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    )}
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -113,16 +123,6 @@ export default function AtataDinizApp() {
                       <Upload className="h-3 w-3 mr-2" />
                       Importar .txt
                     </Button>
-                    {transcript && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 text-destructive hover:bg-destructive/5"
-                        onClick={() => setTranscript("")}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    )}
                   </div>
                 </div>
                 <Textarea

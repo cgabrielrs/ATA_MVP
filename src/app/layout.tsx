@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import './global.css';
 
 export const metadata: Metadata = {
-  title: 'Plataforma de Atas Diniz - Geração Inteligente de Atas',
+  title: 'Atas Diniz - Geração Inteligente de Atas',
   description: 'Gere atas de reunião profissionais a partir de transcrições com IA.',
 };
 

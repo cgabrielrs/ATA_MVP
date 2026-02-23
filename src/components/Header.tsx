@@ -7,7 +7,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <img src="/diniz-logo.png" width={150} height={150} alt="Logo Diniz" className="h-30 w-30" />
           <span className="text-sm font-bold tracking-tight text-foreground">
-            Plataforma de Atas Diniz
+            Atas Diniz
           </span>
         </div>
         

@@ -106,9 +106,8 @@ export default function AtataDinizApp() {
                       onChange={handleFileUpload}
                     />
                     <Button 
-                      variant="ghost" 
                       size="sm" 
-                      className="h-8 text-[10px] uppercase font-bold tracking-wider"
+                      className="rounded-md font-semibold h-10 px-6"
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <Upload className="h-3 w-3 mr-2" />

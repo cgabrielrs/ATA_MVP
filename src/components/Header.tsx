@@ -1,13 +1,13 @@
-import { Zap } from "lucide-react";
+// import { BookOpen } from "lucide-react";
 
 export function Header() {
   return (
     <header className="w-full border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Zap className="h-4 w-4 text-foreground fill-current" />
-          <span className="text-sm font-bold tracking-tight text-foreground uppercase">
-            AtaZap
+          <img src="/diniz-logo.png" width={150} height={150} alt="Logo Diniz" className="h-30 w-30" />
+          <span className="text-sm font-bold tracking-tight text-foreground">
+            Plataforma de Atas Diniz
           </span>
         </div>
         

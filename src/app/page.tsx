@@ -19,7 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type AppState = "input" | "loading" | "edit" | "result";
 
-export default function AtaZapApp() {
+export default function AtataDinizApp() {
   const [appState, setAppState] = useState<AppState>("input");
   const [transcript, setTranscript] = useState("");
   const [draftResult, setDraftResult] = useState<GenerateMeetingMinutesDraftOutput | null>(null);

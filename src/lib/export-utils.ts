@@ -69,7 +69,7 @@ export const exportToPDF = (data: GenerateMeetingMinutesDraftOutput) => {
     y += (splitStep.length * 6) + 2;
   });
 
-  doc.save('Ata_Reuniao_AtaZap.pdf');
+  doc.save('Ata_Reuniao_Diniz.pdf');
 };
 
 export const exportToDOCX = async (data: GenerateMeetingMinutesDraftOutput) => {
@@ -134,5 +134,5 @@ export const exportToDOCX = async (data: GenerateMeetingMinutesDraftOutput) => {
   });
 
   const blob = await Packer.toBlob(doc);
-  saveAs(blob, 'Ata_Reuniao_AtaZap.docx');
+  saveAs(blob, 'Ata_Reuniao_Diniz.docx');
 };

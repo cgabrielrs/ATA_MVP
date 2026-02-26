@@ -22,9 +22,6 @@ import type { GenerateMeetingMinutesDraftOutput } from '@/ai/flows/generate-meet
    PDF EXPORT
 ========================================================= */
 
-import { jsPDF } from 'jspdf';
-import type { GenerateMeetingMinutesDraftOutput } from '@/ai/flows/generate-meeting-minutes-draft';
-
 export const exportToPDF = async (data: GenerateMeetingMinutesDraftOutput) => {
   const doc = new jsPDF();
 

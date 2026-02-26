@@ -22,44 +22,62 @@ import type { GenerateMeetingMinutesDraftOutput } from '@/ai/flows/generate-meet
    PDF EXPORT
 ========================================================= */
 
-export const exportToPDF = async (
-  data: GenerateMeetingMinutesDraftOutput
-) => {
+import { jsPDF } from 'jspdf';
+import type { GenerateMeetingMinutesDraftOutput } from '@/ai/flows/generate-meeting-minutes-draft';
+
+export const exportToPDF = async (data: GenerateMeetingMinutesDraftOutput) => {
   const doc = new jsPDF();
+
   const margin = 20;
-  let y = 30;
+  let y = 45;
 
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  // LOGO
+  // ===============================
+  // 🔴 LOGO NO TOPO DIREITO
+  // ===============================
   const logo = new Image();
-  logo.src = '/diniz-logo.png';
+  logo.src = '/logo-diniz.png';
 
   await new Promise((resolve) => {
     logo.onload = resolve;
   });
 
-  doc.addImage(logo, 'PNG', pageWidth - 60, 15, 40, 18);
+  const logoWidth = 50;
+  const logoHeight = 20;
 
-  // TÍTULO
+  doc.addImage(
+    logo,
+    'PNG',
+    pageWidth - logoWidth - margin,
+    15,
+    logoWidth,
+    logoHeight
+  );
+
+  // ===============================
+  // 🔴 TÍTULO (ALINHADO À ESQUERDA)
+  // ===============================
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.text('Ata de Reunião', margin, y);
+  doc.setFontSize(22);
+  doc.setTextColor(200, 16, 46); // Vermelho institucional
+
+  doc.text('ATA DE REUNIÃO', margin, 30);
+
+  // Linha divisória
+  doc.setDrawColor(200, 16, 46);
+  doc.setLineWidth(0.8);
+  doc.line(margin, 35, pageWidth - margin, 35);
 
   y += 10;
 
-  // DATA
-  const hoje = new Date().toLocaleDateString('pt-BR');
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(11);
-  doc.text(`Gerado em ${hoje}`, margin, y);
-
-  y += 15;
-
-  // OBJETIVOS
+  // ===============================
+  // 📝 OBJETIVOS
+  // ===============================
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
+  doc.setTextColor(0, 0, 0);
   doc.text('Objetivos', margin, y);
 
   y += 8;
@@ -72,15 +90,18 @@ export const exportToPDF = async (
   );
 
   doc.text(objectives, margin, y);
-  y += objectives.length * 6 + 12;
+  y += objectives.length * 6 + 10;
 
-  // PARTICIPANTES
+  // ===============================
+  // 👥 PARTICIPANTES
+  // ===============================
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.text('Participantes', margin, y);
 
   y += 8;
   doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
 
   const participants =
     data.participants?.join(', ') || 'Nenhum identificado';
@@ -91,63 +112,87 @@ export const exportToPDF = async (
   );
 
   doc.text(splitParticipants, margin, y);
-  y += splitParticipants.length * 6 + 12;
+  y += splitParticipants.length * 6 + 10;
 
-  // RESUMO
+  // ===============================
+  // 📌 RESUMo DA DISCUSSÃO
+  // ===============================
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.text('Resumo da Discussão', margin, y);
 
   y += 8;
   doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
 
   data.discussionPoints?.forEach((point) => {
-    const bulleted = `• ${point}`;
-
     const splitPoint = doc.splitTextToSize(
-      bulleted,
+      `• ${point}`,
       pageWidth - margin * 2
     );
 
-    if (y + splitPoint.length * 6 > pageHeight - 20) {
+    if (y + splitPoint.length * 6 > pageHeight - 30) {
       doc.addPage();
-      y = 20;
+      y = 30;
     }
 
     doc.text(splitPoint, margin, y);
-    y += splitPoint.length * 6 + 8;
+    y += splitPoint.length * 6 + 4;
   });
 
-  y += 10;
+  y += 8;
 
-  // PRÓXIMOS PASSOS
+  // ===============================
+  // 🚀 PRÓXIMOS PASSOS
+  // ===============================
+  if (y > pageHeight - 50) {
+    doc.addPage();
+    y = 30;
+  }
+
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.text('Próximos Passos', margin, y);
 
   y += 8;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
 
   data.nextSteps?.forEach((step) => {
-    const taskText = doc.splitTextToSize(
-      `• ${step.task}`,
+    const stepText = `• ${step.task} (Responsável: ${
+      step.responsible || 'N/A'
+    }, Prazo: ${step.deadline || 'N/A'})`;
+
+    const splitStep = doc.splitTextToSize(
+      stepText,
       pageWidth - margin * 2
     );
 
-    if (y + taskText.length * 6 > pageHeight - 20) {
+    if (y + splitStep.length * 6 > pageHeight - 30) {
       doc.addPage();
-      y = 20;
+      y = 30;
     }
 
-    doc.text(taskText, margin, y);
-    y += taskText.length * 6 + 5;
-
-    doc.setFont('helvetica', 'normal');
-    const meta = `Responsável: ${step.responsible || 'Não informado'}${step.deadline ? `  |  Prazo: ${step.deadline}` : ''}`;
-    doc.text(meta, margin, y);
-    doc.setFont('helvetica', 'normal');
-
-    y += 10;
+    doc.text(splitStep, margin, y);
+    y += splitStep.length * 6 + 4;
   });
+
+  // ===============================
+  // 📄 PAGINAÇÃO
+  // ===============================
+  const pageCount = doc.getNumberOfPages();
+
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(9);
+    doc.setTextColor(120);
+    doc.text(
+      `Página ${i} de ${pageCount}`,
+      pageWidth / 2,
+      pageHeight - 10,
+      { align: 'center' }
+    );
+  }
 
   doc.save('Ata_Reuniao_Diniz.pdf');
 };

@@ -35,7 +35,7 @@ export const exportToPDF = async (data: GenerateMeetingMinutesDraftOutput) => {
   // 🔴 LOGO NO TOPO DIREITO
   // ===============================
   const logo = new Image();
-  logo.src = '/logo-diniz.png';
+  logo.src = '/diniz-logo.png';
 
   await new Promise((resolve) => {
     logo.onload = resolve;

@@ -309,7 +309,7 @@ export const exportToDOCX = async (
           // Logo
           new ImageRun({
             data: logoBuffer,
-            transformation: { width: 110, height: 122 },
+            transformation: { width: 140, height: 90 },
             type: 'png',
           }),
         ],
